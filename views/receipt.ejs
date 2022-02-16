@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=locale.receipt%></title>
+    </head>
+    <body>
+        <h1><%=locale.payment_id%>: <%=id%></h1>
+        <h4><%=locale.payment_date%>: <%=paymentDate%></h4>
+        <p style="color: <% if (status == 'pending') {%>red<%} else {%>black<%}%>"><%=locale.payment_status%>: <%=status%></p>
+        <% if (status != 'pending') { %>
+        <hr />
+        <h4><%=locale.im%><br /><%=locale.developer%></h4>
+        <hr />
+        <p><%=locale.developer_description%></p>
+        <hr />
+        <table style="width:100%">
+            <tr>
+                <th><%=locale.payment_position_name%></th>
+                <th><%=locale.payment_position_sum%></th>
+            </tr>
+            <tr>
+                <td>1. <%=locale.payment_position%> №<%=account%></td>
+                <td style="text-align: center;"><%=sum%> <%=currency%></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td><%=locale.payment_total%>:</td>
+                <td style="text-align: center;"><%=sum%> <%=currency%></td>
+            </tr>
+        </table>
+        <hr />
+        <table style="width:100%">
+            <tr>
+                <td><%=locale.payment_nalog_mode%></td>
+                <td>НПД</td>
+            </tr>
+            <tr>
+                <td><%=locale.payment_inn%></td>
+                <td>212720193231</td>
+            </tr>
+            <tr>
+                <td><%=locale.payment_phone%></td>
+                <td>+79278421477</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>akrasnov87@gmail.com</td>
+            </tr>
+        </table>
+        <hr />
+        <h4><%=locale.payment_customer%>: <%=user%></h4>
+        <% if(notice) { %>
+            <hr />
+            <%-notice%>
+        <% } %>
+        <% } %>
+    </body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "name": "city-rpc-service",
+  "version": "4.47.807",
+  "private": true,
+  "birthday": "2021-10-25",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "args-parser": "^1.3.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "latest",
+    "ejs": "^3.1.5",
+    "email-validator": "^2.0.4",
+    "express": "^4.17.2",
+    "express-fileupload": "^1.2.0",
+    "express-session": "^1.17.1",
+    "form-data": "latest",
+    "generate-password": "^1.7.0",
+    "http-errors": "^1.8.1",
+    "ip": "^1.1.5",
+    "ip6addr": "^0.2.5",
+    "json-2-csv": "git+https://github.com/akrasnov87/json-2-csv.git",
+    "json-parser": "latest",
+    "log4js": "^4.2.0",
+    "mkdir-recursive": "^0.4.0",
+    "mobnius-pg-dbcontext": "git://git.appcode.pw/mobnius/pg-dbcontext.git",
+    "mobnius-schema-reader": "git://git.appcode.pw/mobnius/schema-reader.git",
+    "moment": "^2.29.1",
+    "node-cache": "^5.1.2",
+    "nodemailer": "^6.7.2",
+    "request": "^2.88.2",
+    "request-ip": "^2.1.3",
+    "rimraf": "^2.6.3",
+    "serve-favicon": "latest",
+    "uuid": "^8.3.2",
+    "yookassa": "^0.1.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://source.developers.google.com/p/mobile-walker/r/github_akrasnov87_rpc-service"
+  }
+}

@@ -1,0 +1,11 @@
+/node_modules
+/*-lock.json
+/.vscode
+/log
+/*.conf
+/schema
+/*.zip
+/logs
+/*.bat
+/storage
+/schema.reference

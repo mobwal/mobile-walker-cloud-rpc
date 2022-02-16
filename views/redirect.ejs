@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title><%=locale.redirect_page%></title>
+        <script>
+            sessionStorage.setItem('user_id', '<%=user.id%>');
+            sessionStorage.setItem('login', '<%=user.c_login%>');
+            sessionStorage.setItem('roles', '<%=user.c_claims%>');
+            sessionStorage.setItem('token-date', new Date());
+            sessionStorage.setItem('token', '<%=token%>');
+            sessionStorage.setItem('isAuthorize', true);
+
+            location.href = "<%=page%><%=hash%>";
+        </script>
+    </head>
+    <body>
+        <p style="text-align: center;">
+            <img src="logo.png" style="width: 512px;" />
+            <h1 style="text-align: center;"><%=locale.redirect_page%> <b><%=page%></b></h1>
+            <h2 style="text-align: center;"><%=locale.actual_page%> <%=date%></h2>
+        </p>
+        
+        <p style="text-align: right;"><%=locale.version%>: <%=version%></p>
+    </body>
+</html>
