@@ -156,6 +156,7 @@ exports.query = function (session, action, method, tid, data, callback) {
             delete result.time;
             delete result.host;
             delete result.totalTime;
+            delete result.authorizeTime;
         }
 
         callback(result);

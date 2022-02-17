@@ -46,8 +46,17 @@ var server = null;
 
 require('./init')(true, function() {  // инициализация схемы БД
 
+    const socket = require('socket.io');
+    const sync = require('../modules/sync');
+
     var app = require('../app');
     server = http.createServer(app);
+
+    var io = socket(server, {
+        path: vPath + 'socket.io',
+        origins: '*:*'
+    });
+    sync.init(io);
 
     server.listen(port);
     server.on('error', onError);

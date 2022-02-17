@@ -52,37 +52,39 @@
              }
  
              accessFilter.filter(namespace, item, res.user.id, schemas, function (err, rows) {
-                 if (rows && item.data && item.data.length > 0) {
-                     rpcQuery.query(sessionState, item.action, item.method, item.tid, item.data[0], function (result) {
+                if (rows && item.data && item.data.length > 0) {
+                    var _items = item.data.length > 1 ? item.data : item.data[0]
+                    rpcQuery.query(sessionState, item.action, item.method, item.tid, _items, function (result) {
                         if (item.method != 'Query' && item.method != 'Exists' && item.method != 'Select') { // тут добавлен аудит для записей
-                            var table = schemas.map[namespace] ? schemas.map[namespace][item.action] : undefined;
+                           var table = schemas.map[namespace] ? schemas.map[namespace][item.action] : undefined;
 
                             if (table) {
-                                result.result.records = Array.isArray(item.data[0]) ? item.data[0] : [item.data[0]];
+                                result.result.records = Array.isArray(_items) ? _items : [_items];
                                 result.result.total = result.result.records.length;
                             }
                         }
- 
-                         result.authorizeTime = res.authorizeTime;
-                         result.totalTime = new Date() - dt;
-                         result.host = utils.getCurrentHost();
-                         if (alias) {
-                             result.action = alias;
-                         }
- 
-                         if(!args.debug) {
-                             delete result.sql;
-                             delete result.time;
-                             delete result.host;
-                             delete result.totalTime;
-                         }
- 
-                         results.push(result);
-                         // добавлена injection
-                         rpcInjection.handler(sessionState, item.action, item.method, item.data[0], result);
-                         next(callback);
-                     });
-                 } else {
+
+                        result.authorizeTime = res.authorizeTime;
+                        result.totalTime = new Date() - dt;
+                        result.host = utils.getCurrentHost();
+                        if (alias) {
+                            result.action = alias;
+                        }
+
+                        if(!args.debug) {
+                            delete result.sql;
+                            delete result.time;
+                            delete result.host;
+                            delete result.totalTime;
+                            delete result.authorizeTime;
+                        }
+
+                        results.push(result);
+                        // добавлена injection
+                        rpcInjection.handler(sessionState, item.action, item.method, _items, result);
+                        next(callback);
+                    });
+                } else {
                      if (rows == null && res.user.id == -1) { // значит не авторизовался
                          return res.json([{
                              meta: {

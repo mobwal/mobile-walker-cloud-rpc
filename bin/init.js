@@ -10,6 +10,7 @@
  var args = require('../modules/conf')();
  var reader = require('mobnius-schema-reader/index.v3');
  const Console = require('../modules/log');
+ var moment = require('moment');
  
  /**
   * Генерация схемы для NodeJS.
@@ -26,6 +27,9 @@
          output: join(__dirname, '../', 'schema', args.port.toString()),
          readOnly: readOnly
      }, function (schemas) {
+        Date.prototype.toJSON = function () { 
+            return moment.utc(new Date()).format(); 
+        }
         global.schemas = schemas;
         global.schemas.map = {};
         global.schemas.jrnl = {};

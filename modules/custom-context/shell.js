@@ -24,54 +24,36 @@ exports.shell = function (session) {
          * Получение серверного времени
          * @param {*} data 
          * @param {*} callback 
+         * 
          * @example
-         * [{ action: "shell", method: "getServerTime", data: [{ }], type: "rpc", tid: 0 }]
+         * [{ action: "shell", method: "servertime", data: [{ }], type: "rpc", tid: 0 }]
          */
-        getServerTime: function (data, callback) {
+         servertime: function (data, callback) {
             callback(result_layout.ok([{ date: new Date() }]));
         },
 
         /**
-         * Получение настройки для мобильного приложения
+         * Получение настройки для мобильного приложения MOBILE_
          * @param {*} data 
          * @param {*} callback 
          * 
          * @example
-         * [{ action: "shell", method: "getMobileSettings", data: [{ }], type: "rpc", tid: 0 }]
+         * [{ action: "shell", method: "mobilesettings", data: [{ }], type: "rpc", tid: 0 }]
          */
-        getMobileSettings: function(data, callback) {
-            db.table('core', 'sd_settings', session).Query({ filter: [
-                { "property": "c_key", "operator": "ilike", "value": "MOBILE_" }
-            ]}, function(output) {
-                var data = {}
-                var records = output.result.records;
-                if (output.meta.success) {
-                    for(var i = 0; i < records.length; i++) {
-                        var record = records[i];
+        mobilesettins: function(data, callback) {
+            getSettings('MOBILE_', session, callback);
+        },
 
-                        switch(record.c_type) {// TEXT, INT, BOOL, DATE
-                            case 'INT':
-                                data[record.c_key] = parseInt(record.c_value)
-                                break;
-
-                            case 'BOOL':
-                                data[record.c_key] = (record.c_value || 'true').toLowerCase() == 'true'
-                                break;
-
-                            case 'DATE':
-                                data[record.c_key] = new Date(record.c_value || '')
-                                break;
-
-                            default:
-                                data[record.c_key] = record.c_value;
-                                break;
-                        }
-                    }
-                    callback(result_layout.ok([data]));
-                } else {
-                    callback(result_layout.error([]));
-                }
-            });
+        /**
+         * Получение настройки для веб-интерфейса WEB_
+         * @param {*} data 
+         * @param {*} callback 
+         * 
+         * @example
+         * [{ action: "shell", method: "websettings", data: [{ }], type: "rpc", tid: 0 }]
+         */
+        websettings: function(data, callback) {
+            getSettings('WEB_', session, callback);
         },
 
         /**
@@ -143,6 +125,22 @@ exports.shell = function (session) {
         users: function(data, callback) {
             db.func('core', 'sf_level_users', session).Select(Object.assign(data, { params: [session.user.f_level, util.getOrgId(session.user)] }), function (output) {
                 callback(result_layout.ok(output.result.records));
+            });
+        },
+
+        /**
+         * Получение информации о дочернем пользователе
+         * @param {*} data 
+         * @param {*} callback 
+         * 
+         * @example
+         * [{ action: "shell", method: "childuser", data: [{ params: [userID] }], type: "rpc", tid: 0 }]
+         */
+         childuser: function(data, callback) {
+            var level = session.user.f_level;
+
+            db.func('core', 'sf_level_users', session).Select({ params: [level], filter: [{ "property": "id", "value": data.params[0] }] }, (output) => {
+                callback(output);
             });
         },
 
@@ -283,4 +281,39 @@ exports.shell = function (session) {
             });
         }
     }
+}
+
+function getSettings(key, session, callback) {
+    db.table('core', 'sd_settings', session).Query({ filter: [
+        { "property": "c_key", "operator": "ilike", "value": key }
+    ]}, function(output) {
+        var data = {}
+        var records = output.result.records;
+        if (output.meta.success) {
+            for(var i = 0; i < records.length; i++) {
+                var record = records[i];
+
+                switch(record.c_type) {// TEXT, INT, BOOL, DATE
+                    case 'INT':
+                        data[record.c_key] = parseInt(record.c_value)
+                        break;
+
+                    case 'BOOL':
+                        data[record.c_key] = (record.c_value || 'true').toLowerCase() == 'true'
+                        break;
+
+                    case 'DATE':
+                        data[record.c_key] = new Date(record.c_value || '')
+                        break;
+
+                    default:
+                        data[record.c_key] = record.c_value;
+                        break;
+                }
+            }
+            callback(result_layout.ok([data]));
+        } else {
+            callback(result_layout.error([]));
+        }
+    });
 }
